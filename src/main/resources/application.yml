@@ -1,0 +1,85 @@
+####Server configuration
+spring:
+  profiles:
+    active: dev
+security:
+  basic.enabled: false
+jwt:
+  secret: test
+####DEV
+---
+spring:
+  profiles: dev
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true
+    use-sql_comments: false
+    format-sql: true
+    properties:
+      hibernate:
+        # Hibernate ddl auto (create, create-drop, validate, update)
+        ddl-auto: update
+        formatSql: true
+        jdbc:
+          lob:
+            non-contextual-creation: true
+  h2:
+    #Enable console access default false
+    console:
+      enabled: true
+      settings:
+        #Enable H2 console trace to facilitate debugging default false
+        trace: true
+        #Allow console remote access default false
+        web-allow-others: true
+      #H2 access path context
+      path: /h2-console
+
+server:
+  port: 7000
+logging:
+  level:
+    myapps: DEBUG
+app:
+  asset-host: localhost:8080
+
+####TEST
+---
+spring:
+  profiles: test
+  datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:test;MODE=PostgreSQL;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+  jpa:
+    database: H2
+    hibernate:
+      ddl-auto: create-drop
+flyway:
+  enabled: false
+server:
+  port: 0
+logging:
+  level:
+    myapps: DEBUG
+####PRODUCTION
+---
+spring:
+  profiles: production
+  datasource:
+    driverClassName: org.postgresql.Driver
+  jpa:
+    database: POSTGRESQL
+    hibernate:
+      ddl-auto: validate
+endpoints:
+  enabled: false
+  health.enabled: true
+app:
+  asset-host: ts-ng-webpack.5ik.biz
